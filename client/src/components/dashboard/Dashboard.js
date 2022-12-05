@@ -15,10 +15,27 @@ const Dashboard = () => {
     const [ currentTotalTransactions, setCurrentTotalTransactions ] = useState(0)
     const [ maxTransaction, setMaxTransaction ] = useState(0)
     const [loading, setLoading] = useState(true)
+    const [ errors, setErrors ] = useState([])
 
     useEffect(() => {
     fetch (`/budgetsummary/${month_desc}`)
     .then(response => response.json())
+    .then((data) => {
+        if (data.errors){
+          console.log(data.errors)
+            setErrors(data.errors)
+            // setCurrentBudget([])
+            setLoading(true)
+        } else {
+            setCurrentBudget(data)
+            setLoading(false)
+        }
+    })
+
+
+
+
+
     .then(data => {
         if (data) {
             setCurrentBudget(data)
@@ -26,21 +43,23 @@ const Dashboard = () => {
         }
         else {
             console.error(data)
+            setCurrentBudget([])
             
         };
     })
     
     fetch (`/budgetsummary/${month_desc}/max_spend`)
     .then(response => response.json())
-    .then(data => {
-        if (data) {
-            setMaxTransaction(data)
+    .then((data) => {
+        if (data.errors){
+          console.log(data.errors)
+            setErrors(data.errors)
+            setMaxTransaction(0)
             setLoading(false)
+        } else {
+            setMaxTransaction(data)
+          console.log(data)
         }
-        else {
-            console.error(data)
-            
-        };
     })
     },[])
 

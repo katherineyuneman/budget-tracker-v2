@@ -35,33 +35,12 @@ function App() {
             <Routes>
               <Route exact path="/budgets/new" element={<BudgetForm />}/>
               <Route path="/budgets" element={<BudgetsContainer />}/>
-                
-     
-
-              <Route path='/budgets/:id/transactions'>
-                <BudgetTransactions />
-              </Route>
-
-              <Route exact path="/transactions">
-                <TransactionsContainer />
-              </Route>
-
-              <Route exact path="/transactions/new">
-                <TransactionForm />
-              </Route>
-
-              <Route exact path="/new">
-                <NewForm />
-              </Route>
-
-              <Route exact path="/login">
-                <Login />
-              </Route>
-
-              <Route exact path="/">
-                <Dashboard />
-              </Route>
-
+              <Route path='/budgets/:id/transactions' element={<BudgetTransactions />} />
+              <Route exact path="/transactions" element={<TransactionsContainer />} />
+              <Route exact path="/transactions/new" element={<TransactionForm />}/>
+              <Route exact path="/new" element={<NewForm />}/>
+              <Route exact path="/login" element={<Login />}/>
+              <Route exact path="/" element={<Dashboard />} />
             </Routes>
           </UserProvider>
         </div>
