@@ -50,12 +50,12 @@ class TransactionsController < ApplicationController
 
     private
     
-    def transactions_sum
-        @transactions_budget_sum = Transaction.where('budget_id = ?', params[:id]).sum(:amount)
-        # @transactions_budget_sum = Transaction.where(:budget_id => params[:id]).sum(:amount)
-        # @transactions_budget_sum = Transaction.where(budget_id: params[:id]).sum(:amount)
-        render json: transactions_budget_sum
-    end
+    # def transactions_sum_private
+    #     @transactions_budget_sum = Transaction.where('budget_id = ?', params[:id]).sum(:amount)
+    #     # @transactions_budget_sum = Transaction.where(:budget_id => params[:id]).sum(:amount)
+    #     # @transactions_budget_sum = Transaction.where(budget_id: params[:id]).sum(:amount)
+    #     render json: transactions_budget_sum
+    # end
 
     
 end

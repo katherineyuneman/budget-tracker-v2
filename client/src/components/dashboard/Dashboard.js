@@ -9,7 +9,8 @@ import DashboardRecent from "./DashboardRecent";
 const Dashboard = () => {
 
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    const month_desc = months[new Date().getMonth()]
+    const month_desc = months[(new Date().getMonth())]
+    console.log("months desc", month_desc)
 
     const [currentBudget, setCurrentBudget] = useState([])
     const [ currentTotalTransactions, setCurrentTotalTransactions ] = useState(0)
@@ -24,13 +25,14 @@ const Dashboard = () => {
         if (data.errors){
           console.log(data.errors)
             setErrors(data.errors)
-            // setCurrentBudget([])
+            setCurrentBudget([])
             setLoading(true)
         } else {
             setCurrentBudget(data)
             setLoading(false)
         }
     })
+    
     fetch (`/budgetsummary/${month_desc}/max_spend`)
     .then(response => response.json())
     .then((data) => {
@@ -47,15 +49,23 @@ const Dashboard = () => {
     },[])
 
     useEffect(() => {
-    fetch (`/budgets/${currentBudget.id}/transactions/sum`)
-    .then(response => response.json())
-    .then(data => {
-        setCurrentTotalTransactions(data)
-        setLoading(false)
-    })
-    .catch(err => alert(err))
-    },[currentBudget])
+        console.log(currentBudget)
+        fetch (`/budgets/${currentBudget.id}/transactions/sum`)
+        .then(response => response.json())
+        .then((data) => {
+            if (data.errors){
+            console.log(data.errors)
+                setErrors(data.errors)
+                setCurrentTotalTransactions(0)
+                setLoading(false)
+            } else {
+                setCurrentTotalTransactions(data)
+                console.log("transaction sum data", data)
+            }
+        })
+    },[[],currentBudget])
 
+    
     if (loading) return <h1>Loading...</h1>
 
  
