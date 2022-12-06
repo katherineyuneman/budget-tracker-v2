@@ -2,7 +2,7 @@ class BudgetsController < ApplicationController
 
     
     def index
-        budgets = Budget.includes(:month).order("months.month_num ASC")
+        budgets = Budget.includes(:month).order("months.year, months.month_num ASC")
         render json: budgets, include: ['month']
     end
 
@@ -19,14 +19,18 @@ class BudgetsController < ApplicationController
     def budget_summary
         month_id = Month.month_desc_conversion(params[:month_desc])
         budget = Budget.find_by_month_id(month_id)
-        budget.to_json(include: :month)
+        render json: budget, include: ['month']
     end
 
     def max_spend
         month_id = Month.month_desc_conversion(params[:month_desc])
         budget_id = Budget.find_by_month_id(month_id).id
         max_spend = Transaction.where(:budget_id => budget_id).maximum(:amount)
-        max_spend.to_json
+        if max_spend
+            render json: max_spend
+        else
+            render json: { error: "No transactions available" }, status: :unauthorized
+        end
     end
 
 

@@ -1,8 +1,8 @@
 class CategoriesController < ApplicationController
 
-    get '/categories' do
-        @categories = Category.all
-        @categories.to_json()
+    def index
+        categories = Category.all
+        render json: categories
     end
     
 

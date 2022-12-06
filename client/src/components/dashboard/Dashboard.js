@@ -31,23 +31,6 @@ const Dashboard = () => {
             setLoading(false)
         }
     })
-
-
-
-
-
-    .then(data => {
-        if (data) {
-            setCurrentBudget(data)
-            setLoading(false)
-        }
-        else {
-            console.error(data)
-            setCurrentBudget([])
-            
-        };
-    })
-    
     fetch (`/budgetsummary/${month_desc}/max_spend`)
     .then(response => response.json())
     .then((data) => {
