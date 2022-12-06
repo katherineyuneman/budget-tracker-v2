@@ -37,9 +37,8 @@ class BudgetsController < ApplicationController
 
     def update
         budget = Budget.find(params[:id])
-        byebug
         if budget
-            budget.update(params)
+            budget.update(budget_params)
             
             render json: budget, include: [:month]
         else
@@ -57,7 +56,7 @@ class BudgetsController < ApplicationController
     private
 
     def budget_params
-        params.permit(:id, :amount)
+        params.require(:budget).permit(:id, :amount)
     end
 
     # def month_desc_conversion
