@@ -7,7 +7,6 @@ function DashboardRecent() {
     const [ recentTransactions, setRecentTransactions ] = useState([])
     const [ errors, setErrors ] = useState([])
 
-
     useEffect(() => {
     fetch (`/transactions/recent`)
         .then(response => response.json())
@@ -23,7 +22,6 @@ function DashboardRecent() {
         })
     },[])
 
-   
     
     if (recentTransactions.length > 0){
     const recentTransactionsMapped = recentTransactions.map((transaction) => {

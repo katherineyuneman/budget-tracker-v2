@@ -1,26 +1,28 @@
 class BudgetsController < ApplicationController
 
     
-    get '/budgets' do
+    def index
         budgets = Budget.includes(:month).order("months.month_num ASC")
-        budgets.to_json(include: :month)
+        render json: budgets, include: ['month']
     end
 
-    post '/budgets' do
+    def create
         budget = Budget.create(month_id: params[:month_id], amount: params[:amount].to_i, user_id: params[:user_id])
         if budget.id
-            budget.to_json
-        else {errors: budget.errors.full_messages.to_sentence}.to_json
+            render json: budget
+        else
+            render json: { error: "Not authorized" }, status: :unauthorized
+       
         end
     end
 
-    get '/budgetsummary/:month_desc' do
+    def budget_summary
         month_id = Month.month_desc_conversion(params[:month_desc])
         budget = Budget.find_by_month_id(month_id)
         budget.to_json(include: :month)
     end
 
-    get '/budgetsummary/:month_desc/max_spend' do
+    def max_spend
         month_id = Month.month_desc_conversion(params[:month_desc])
         budget_id = Budget.find_by_month_id(month_id).id
         max_spend = Transaction.where(:budget_id => budget_id).maximum(:amount)
@@ -28,24 +30,36 @@ class BudgetsController < ApplicationController
     end
 
 
-    get '/budgets/:id' do
+    def show
         budget  = Budget.find(params[:id])
-        budget.to_json(include: :month)
-      end
-
-    patch '/budgets/:id' do
-        budget = Budget.find(params[:id])
-        budget.update(params)
         budget.to_json(include: :month)
     end
 
-    delete '/budgets/:id' do
+    def update
+        budget = Budget.find(params[:id])
+        byebug
+        if budget
+            budget.update(params)
+            
+            render json: budget, include: [:month]
+        else
+            render json: { error: "Not authorized" }, status: :unauthorized
+       
+        end
+    end
+
+    def destroy
         budget = Budget.find(params[:id])
         budget.destroy
         budget.to_json
     end
 
     private
+
+    def budget_params
+        params.permit(:id, :amount)
+    end
+
     # def month_desc_conversion
     #     Month.find_by_month_desc(params[:month_desc]).id
     # end

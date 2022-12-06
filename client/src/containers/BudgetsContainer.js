@@ -7,28 +7,42 @@ import BudgetForm from "../components/budgets/BudgetForm";
 function BudgetsContainer() {
   const [budgets, setBudgets] = useState([])
   const [loading, setLoading] = useState(true)
+  const [ errors, setErrors ] = useState([])
 
   useEffect(() => {
     fetch ('/budgets')
     .then(response => response.json())
-    .then(data => {
-      setBudgets(data)
-      setLoading(false)
-    })
-    .catch(err => alert(err))
+    .then((data) => {
+      if (data.error){
+        console.log("data error", data.error)
+          setErrors(data.errors)
+          setBudgets([])
+          setLoading(true)
+      } else {
+          setBudgets(data)
+          setLoading(false)
+      }
+  })
   },[])
 
+  
   if (loading) return <h1>Loading...</h1>
+  
 
   const handleBudgetDelete = (id) => {
     const removalOfBudget = budgets.filter((budget) => budget.id !== id);
     setBudgets(removalOfBudget);
   }
 
-  const updatedBudgets = budgets.map((budget) => {
-    const newObj = {amount: budget.amount, id: budget.id, month: budget.month.month_desc, year: budget.month.year}
-    return newObj
-  })
+  let updatedBudgets
+
+  if (budgets.length > 0 || budgets === 'errors') {
+    updatedBudgets = budgets.map((budget) => {
+      const newObj = {amount: budget.amount, id: budget.id, month: budget.month.month_desc, year: budget.month.year}
+      return newObj
+    })
+}
+
 
   return (
     <div>

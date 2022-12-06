@@ -1,19 +1,19 @@
 class TransactionsController < ApplicationController
 
-    get '/transactions' do
+    def index
         @budget_select_custom = Transaction.budget_select
         @budget_transactions = @budget_select_custom.order(created_at: :desc)
-        @budget_transactions.to_json()
+        render json: @budget_transactions
 
     end
 
-    get '/transactions/recent' do
+    def recent
         @budget_select_custom = Transaction.budget_select
         @transaction_summary = @budget_select_custom.order(created_at: :desc).first(4)
-        @transaction_summary.to_json()
+        render json: @transaction_summary
     end
 
-    post '/transactions' do
+    def create
         transaction = Transaction.create(
             description: params[:description],
             amount: params[:amount].to_f,
@@ -27,17 +27,17 @@ class TransactionsController < ApplicationController
         end
     end
 
-    get '/budgets/:id/transactions' do
+    def budget_transactions
         @budget_select_custom = Transaction.budget_select
         @transactions_budget = @budget_select_custom.where(:budget_id => params[:id])
         @transactions_budget.to_json
     end
 
-    get '/budgets/:id/transactions/sum' do
+    def transactions_sum
         transactions_sum
     end
 
-    delete '/transactions/:id' do
+    def destroy
         transaction = Transaction.find(params[:id])
         transaction.destroy
         transaction.to_json

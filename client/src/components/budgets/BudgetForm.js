@@ -1,3 +1,4 @@
+import { setMonth } from "date-fns/esm"
 import { useState, useEffect } from "react"
 import {useNavigate } from "react-router-dom"
 import { HomeContainer, PopupCheckout } from "../../styled-components/styleIndex"
@@ -7,6 +8,7 @@ function BudgetForm() {
 
     const [ userOptions, setUserOptions ] = useState([])
     const [ monthOptions, setMonthOptions ] = useState([])
+    const [ error, setError ] = useState({})
 
     const [budgetInputs, setBudgetInputs] = useState ({
         amount:"",
@@ -17,13 +19,27 @@ function BudgetForm() {
     useEffect(() => {
         fetch ('/users')
         .then(response => response.json())
-        .then(data => setUserOptions(data))
-        .catch(err => alert(err))
+        .then((data) => {
+            if (data.error){
+              console.log("data error", data.error)
+                setError(data.error)
+                setUserOptions([])
+            } else {
+                setUserOptions(data)
+            }
+        })
 
         fetch ('/months')
         .then(response => response.json())
-        .then(data => setMonthOptions(data))
-        .catch(err => alert(err))
+        .then((data) => {
+            if (data.error){
+              console.log("data error", data.error)
+                setError(data.error)
+                setUserOptions([])
+            } else {
+                setMonthOptions(data)
+            }
+        })
       }
       ,[])
 
