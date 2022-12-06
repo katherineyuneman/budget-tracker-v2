@@ -6,12 +6,27 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+##Create Months
+Month.create(month_num: 03, month_desc: "March", year: 2023)
+Month.create(month_num: 04, month_desc: "April", year: 2023)
+Month.create(month_num: 05, month_desc: "May", year: 2023)
+
+
 ### Create Users
-kat = User.create(first_name: "Kat", last_name: "Jussen", email: "kat@kat.com", password_digest:'1234')
+jane = User.create(first_name: "Jane", last_name: "Doe", email: "jane@jane.com", password_digest:'1234')
+
+
+
+
+
+
+t.string "month_num"
+    t.string "month_desc"
+    t.integer "year"
 
 ### Create Budgets
-may_budget = kat.budgets.create(amount: 2000.00, month: "May")
-june_budget = kat.budgets.create(amount: 2400.00, month: "June")
+may_budget = kat.budgets.create(amount: 2000.00, month_id: december22.id)
+june_budget = kat.budgets.create(amount: 2400.00, month_id: "June")
 
 ### Create Categories
 groceries = Category.create(description: "groceries")
