@@ -27,14 +27,13 @@ function DashboardRecent() {
 
     if (recentTransactions.length > 0 ) {
         console.log("recent transactions in dashboardRecent:", recentTransactions.length)
-    const updatedRecentTransactions = 
+    updatedRecentTransactions = 
     recentTransactions.map((transaction) => {
     const formattedDate = format(new Date(transaction.created_at), 'yyyy-MM-dd')
     const formattedTime = format(new Date(transaction.created_at),'pp')
     return (
         <Container>
         <Card key={transaction.id}>
-            <h1> HELLO</h1>
             <h1>${transaction.amount}</h1>
             <h2>{transaction.description}</h2>
             <h5>
